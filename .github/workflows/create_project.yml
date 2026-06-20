@@ -31,21 +31,16 @@ jobs:
 
       - name: Run cmake_project.py
         run: |
-          python3 "${GITHUB_WORKSPACE}/create_project.py" "${{ github.event.repository.name }}"
-          cmake \
-          -D PROJECT_NAME="${{ github.event.repository.name }}" \
-          -D PROJECT_AUTHOR="${{ github.actor }}" \
-          -D PROJECT_DESCRIPTION="${{ github.event.repository.description }}" \
-          -D PROJECT_TYPE="${{ github.event.inputs.project_type }}" \
-          -P "$GITHUB_WORKSPACE/.github/cmake/cmake_project.cmake"
+          python3 "${GITHUB_WORKSPACE}/create_project.py" "${{ github.event.repository.name }}" "${{ github.actor }}" "${{ github.event.inputs.project_type }}"
 
       - name: Update README.md
         run: |
           echo -e "# ${{ github.event.repository.name }}\n${{ github.event.repository.description }}" > "$GITHUB_WORKSPACE/README.md"
 
-      - name: Remove .github directory
+      - name: Clean up
         run: |
-          rm -rf "$GITHUB_WORKSPACE/.github"
+          rm -rf "${GITHUB_WORKSPACE}/.github"
+          rm -rf "${GITHUB_WORKSPACE}/create_project.py"
 
       - name: Commit changes
         run: |
