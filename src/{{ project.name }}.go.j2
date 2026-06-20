@@ -1,0 +1,7 @@
+{%- if project.type == "Executable" -%}
+package main
+
+func main() {}
+{% elif project.type == "Library" -%}
+package {{ project.name }}
+{% endif -%}
